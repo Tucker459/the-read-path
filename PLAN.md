@@ -16,8 +16,9 @@ publicly, and designed to keep growing.
 | Deployment | GitHub Pages, auto-deployed from `main` via GitHub Actions |
 | Framing | Portfolio piece — visual polish and written explanations both matter |
 | Prose | Substantial: per-concept explainer, annotated callouts, "what real systems do" notes |
-| Sequencing | **Pending** — driven by the user's reading list |
-| Scope / abstraction level | **Pending** — driven by the breadth of that reading list |
+| Sequencing | Tracks the reading roadmap's 12 steps — see `ROADMAP.md` |
+| Scope | A platform, built over months. The reading list forces this |
+| Spine | Every concept pairs with its Elasticsearch/Lucene implementation |
 
 ## The architectural constraint
 
@@ -103,11 +104,37 @@ demanding enough — background work on a timer, multi-level state, structures
 that appear and disappear — that it will expose any weakness in the engine while
 the engine is still cheap to change.
 
-## Open items
+## What the reading list changed
 
-Both are waiting on the reading list:
+The roadmap spans 71 items across 12 steps, and its center of gravity is not
+where the project's name suggests. Information retrieval, vector search, and the
+Elastic AI platform account for 26 of those items — and neither DDIA nor
+*Database Internals* covers HNSW, quantization, BM25, or rank fusion at all.
+Three consequences:
 
-- **Sequencing** of concepts after the LSM-tree, to track the reading order.
-- **Scope** — how much shared abstraction is justified on day one. A list that
-  runs through consensus and replication justifies building the network
-  simulation layer early; a list focused on storage engines does not.
+**Scope is settled: this is a platform.** Twelve steps, each with several
+visualizable concepts, is not a three-visualization project. The shared
+simulation core, the concept registry, and the network simulation layer all
+earn their cost several times over. Building them up front is the cheap path,
+not the expensive one.
+
+**The viz layer needs more than trees.** A tree-and-arrow renderer covers the
+storage-engine work and nothing after it. The primitives have to include ranked
+lists with diffing (scoring and fusion), 2D projected point clouds (embedding
+space and quantization error), force-directed graph layout (HNSW), ring layout
+(shard routing and consistent hashing), and node-topology-with-messages
+(replication and consensus). These are budgeted as shared primitives rather than
+rebuilt per concept.
+
+**Every concept gets an Elastic counterpart.** The list has a spine: shard
+routing is MurmurHash3, segment merging is compaction, ILM tiers are data
+tiering, cross-cluster replication is leader-follower replication. Each
+visualization carries a short "in Elasticsearch, this is…" panel connecting the
+abstraction to the system. This makes the tool a genuine companion to the
+reading rather than a parallel artifact — and given the roadmap's evident
+direction, it is also the single strongest thing the portfolio framing can do.
+
+One naming note: `distrbutedsystemsviz` undersells the result. What this list
+describes is a search, storage, and distributed systems visualizer. Worth
+renaming before it is public, and worth fixing the transposed letters while
+we're there.
