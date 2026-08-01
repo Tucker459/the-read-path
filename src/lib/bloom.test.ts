@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { bloomFill, bloomMightContain, createBloom } from './bloom'
-import { createRng } from '../../sim'
+import { createRng } from '../sim'
 
 describe('bloom filter', () => {
   it('never reports a false negative', () => {
