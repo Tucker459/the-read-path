@@ -50,6 +50,13 @@ export interface LsmStats {
   userBytes: number
   /** Bytes actually written to disk, across flushes and every compaction. */
   diskBytes: number
+  /**
+   * Records written to storage, counting every rewrite.
+   *
+   * Bytes and records tell the same story here, but records are the unit a
+   * B+tree can be compared against — see the RUM concept.
+   */
+  recordsWritten: number
   flushes: number
   compactions: number
   reads: number
@@ -316,6 +323,7 @@ export const lsmModel: Model<LsmState, LsmEvent, LsmCommand> = {
     stats: {
       userBytes: 0,
       diskBytes: 0,
+      recordsWritten: 0,
       flushes: 0,
       compactions: 0,
       reads: 0,
@@ -364,6 +372,7 @@ export const lsmModel: Model<LsmState, LsmEvent, LsmCommand> = {
             ...state.stats,
             flushes: state.stats.flushes + 1,
             diskBytes: state.stats.diskBytes + table.bytes,
+            recordsWritten: state.stats.recordsWritten + table.entries.length,
           },
         }
       }
@@ -388,6 +397,8 @@ export const lsmModel: Model<LsmState, LsmEvent, LsmCommand> = {
             ...state.stats,
             compactions: state.stats.compactions + 1,
             diskBytes: state.stats.diskBytes + added.reduce((total, table) => total + table.bytes, 0),
+            recordsWritten:
+              state.stats.recordsWritten + added.reduce((total, table) => total + table.entries.length, 0),
           },
         }
       }
