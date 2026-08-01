@@ -1,6 +1,8 @@
 import type { ComponentType } from 'react'
 import { WalPanel } from './wal/WalPanel'
 import { WalExplainer } from './wal/Explainer'
+import { LsmPanel } from './lsm/LsmPanel'
+import { LsmExplainer } from './lsm/Explainer'
 
 export interface Concept {
   id: string
@@ -41,6 +43,8 @@ export const CONCEPTS: Concept[] = [
     phase: 'Storage engines',
     reading: 'DDIA ch. 4 · Database Internals part I',
     elastic: 'The segment lifecycle',
+    Panel: LsmPanel,
+    Explainer: LsmExplainer,
   },
   {
     id: 'b-plus-tree',
