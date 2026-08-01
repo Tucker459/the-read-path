@@ -10,7 +10,9 @@ import {
   removeFromLeaf,
   splitPath,
   writeToLeaf,
+  type Page,
   type PageId,
+  type PageMap,
   type Tree,
 } from './tree'
 
@@ -38,6 +40,14 @@ export interface BTreeStats {
   pageReads: number
   /** Pages written back. */
   pageWrites: number
+  /**
+   * Records rewritten to storage.
+   *
+   * A page write rewrites every record in that page, not just the one that
+   * changed. That is where a B+tree's write amplification comes from, and it
+   * is the unit the LSM-tree can be compared against — see the RUM concept.
+   */
+  recordsWritten: number
   splits: number
   merges: number
   borrows: number
@@ -78,6 +88,7 @@ const initialStats = (): BTreeStats => ({
   searches: 0,
   pageReads: 0,
   pageWrites: 0,
+  recordsWritten: 0,
   splits: 0,
   merges: 0,
   borrows: 0,
@@ -85,6 +96,11 @@ const initialStats = (): BTreeStats => ({
 
 function tail(path: readonly PageId[]): PageId {
   return path[path.length - 1] as PageId
+}
+
+/** Records contained in a set of pages, for the write-amplification counter. */
+function recordsIn(pages: PageMap, ids: readonly PageId[]): number {
+  return ids.reduce((total, id) => total + (pages[id]?.keys.length ?? 0), 0)
 }
 
 /**
@@ -164,6 +180,8 @@ export const btreeModel: Model<BTreeState, BTreeEvent, BTreeCommand> = {
             ? writeToLeaf(state.tree.pages, leafId, op.key, op.value ?? '')
             : removeFromLeaf(state.tree.pages, leafId, op.key)
 
+        const rewritten = (pages[leafId] as Page | undefined)?.keys.length ?? 0
+
         return {
           ...state,
           tree: { ...state.tree, pages },
@@ -171,6 +189,7 @@ export const btreeModel: Model<BTreeState, BTreeEvent, BTreeCommand> = {
           stats: {
             ...state.stats,
             pageWrites: state.stats.pageWrites + 1,
+            recordsWritten: state.stats.recordsWritten + rewritten,
             inserts: state.stats.inserts + (op.kind === 'insert' ? 1 : 0),
             deletes: state.stats.deletes + (op.kind === 'delete' ? 1 : 0),
           },
@@ -191,6 +210,7 @@ export const btreeModel: Model<BTreeState, BTreeEvent, BTreeCommand> = {
             ...state.stats,
             splits: state.stats.splits + 1,
             pageWrites: state.stats.pageWrites + result.written.length,
+            recordsWritten: state.stats.recordsWritten + recordsIn(result.pages, result.written),
           },
         }
       }
@@ -211,6 +231,7 @@ export const btreeModel: Model<BTreeState, BTreeEvent, BTreeCommand> = {
             merges: state.stats.merges + (merged ? 1 : 0),
             borrows: state.stats.borrows + (borrowed ? 1 : 0),
             pageWrites: state.stats.pageWrites + result.written.length,
+            recordsWritten: state.stats.recordsWritten + recordsIn(result.pages, result.written),
           },
         }
       }

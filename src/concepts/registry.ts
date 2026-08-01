@@ -7,6 +7,8 @@ import { BTreePanel } from './btree/BTreePanel'
 import { BTreeExplainer } from './btree/Explainer'
 import { BloomPanel } from './bloom/BloomPanel'
 import { BloomExplainer } from './bloom/Explainer'
+import { RumPanel } from './rum/RumPanel'
+import { RumExplainer } from './rum/Explainer'
 
 export interface Concept {
   id: string
@@ -69,6 +71,15 @@ export const CONCEPTS: Concept[] = [
     elastic: 'SSTable and segment filters',
     Panel: BloomPanel,
     Explainer: BloomExplainer,
+  },
+  {
+    id: 'rum-conjecture',
+    title: 'The RUM conjecture',
+    blurb: 'One workload, both engines, and the three overheads you cannot minimise at once.',
+    phase: 'Storage engines',
+    reading: 'Database Internals · Athanassoulis et al.',
+    Panel: RumPanel,
+    Explainer: RumExplainer,
   },
   {
     id: 'inverted-index',
