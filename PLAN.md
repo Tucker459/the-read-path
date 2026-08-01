@@ -134,7 +134,12 @@ abstraction to the system. This makes the tool a genuine companion to the
 reading rather than a parallel artifact — and given the roadmap's evident
 direction, it is also the single strongest thing the portfolio framing can do.
 
-One naming note: `distrbutedsystemsviz` undersells the result. What this list
-describes is a search, storage, and distributed systems visualizer. Worth
-renaming before it is public, and worth fixing the transposed letters while
-we're there.
+The project is named **The Read Path** (`the-read-path`) rather than
+`distrbutedsystemsviz`, which undersold the scope and misspelled it. A read path
+runs through a bloom filter, a segment, a B-tree, or a neighbor graph — one of
+the few terms that is precise in storage engines, search, and distributed
+systems alike, which is the ground this covers. The name carries no vendor
+association, which matters for a portfolio piece pointed at a specific company.
+
+The cost of an evocative name is that it does not describe itself, so the README
+tagline and the site's landing copy carry that load instead.
