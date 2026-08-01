@@ -1,5 +1,5 @@
 import type { Model, SimContext } from '../../sim'
-import { bloomMightContain, createBloom, type Bloom } from './bloom'
+import { bloomMightContain, createBloom, type Bloom } from '../../lib/bloom'
 
 /** A tombstone is a value of null — a delete is a write, not an erasure. */
 export interface LsmEntry {

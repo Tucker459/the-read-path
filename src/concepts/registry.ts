@@ -5,6 +5,8 @@ import { LsmPanel } from './lsm/LsmPanel'
 import { LsmExplainer } from './lsm/Explainer'
 import { BTreePanel } from './btree/BTreePanel'
 import { BTreeExplainer } from './btree/Explainer'
+import { BloomPanel } from './bloom/BloomPanel'
+import { BloomExplainer } from './bloom/Explainer'
 
 export interface Concept {
   id: string
@@ -64,6 +66,9 @@ export const CONCEPTS: Concept[] = [
     blurb: 'False positives against size and hash count — the LSM read path’s short-circuit.',
     phase: 'Storage engines',
     reading: 'Probability and Computing',
+    elastic: 'SSTable and segment filters',
+    Panel: BloomPanel,
+    Explainer: BloomExplainer,
   },
   {
     id: 'inverted-index',
