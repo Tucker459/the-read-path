@@ -3,6 +3,8 @@ import { WalPanel } from './wal/WalPanel'
 import { WalExplainer } from './wal/Explainer'
 import { LsmPanel } from './lsm/LsmPanel'
 import { LsmExplainer } from './lsm/Explainer'
+import { BTreePanel } from './btree/BTreePanel'
+import { BTreeExplainer } from './btree/Explainer'
 
 export interface Concept {
   id: string
@@ -52,6 +54,9 @@ export const CONCEPTS: Concept[] = [
     blurb: 'Splits, merges, fanout, and what a page-oriented update costs against an append.',
     phase: 'Storage engines',
     reading: 'Database Internals, B-trees',
+    elastic: 'Doc values and the terms index',
+    Panel: BTreePanel,
+    Explainer: BTreeExplainer,
   },
   {
     id: 'bloom-filter',

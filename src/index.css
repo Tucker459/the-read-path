@@ -819,3 +819,87 @@ button.link:hover {
   accent-color: var(--teal);
   padding: 0;
 }
+
+/* ---------- B+tree ---------- */
+
+.btree {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tree-scroll {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.tree-svg {
+  display: block;
+  min-width: 100%;
+  height: auto;
+  max-height: 340px;
+}
+
+.edge {
+  stroke: var(--border);
+  stroke-width: 1.2;
+}
+.edge.active {
+  stroke: var(--gold);
+  stroke-width: 1.8;
+}
+.leaf-link {
+  stroke: var(--teal);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0.55;
+}
+
+.node {
+  fill: var(--surface-2);
+  stroke: var(--border);
+  stroke-width: 1.2;
+  transition:
+    stroke 0.2s,
+    fill 0.2s;
+}
+.node.leaf {
+  fill: #191f27;
+}
+.node.hl-path {
+  stroke: var(--muted);
+}
+.node.hl-read {
+  stroke: var(--teal);
+  stroke-width: 2;
+}
+.node.hl-write {
+  stroke: var(--gold);
+  stroke-width: 2;
+  fill: var(--gold-soft);
+}
+.node.hl-split {
+  stroke: var(--amber);
+  stroke-width: 2;
+  fill: rgba(217, 149, 78, 0.14);
+}
+.node.hl-merge,
+.node.hl-borrow {
+  stroke: var(--red);
+  stroke-width: 2;
+  fill: rgba(217, 113, 78, 0.12);
+}
+
+.node-key {
+  fill: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-anchor: middle;
+}
+.node-key.empty {
+  fill: var(--muted);
+}
+.node-id {
+  fill: var(--muted);
+  font-family: var(--mono);
+  font-size: 8.5px;
+  text-anchor: middle;
+}
