@@ -3,11 +3,16 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # Pull requests run the checks but stop short of deploying, so a merge is
+  # never the first time the build is exercised.
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
-# Allow one deploy at a time, and let a newer push supersede a running one.
+# One deploy at a time, and a newer push supersedes a running one. Pull
+# requests get their own group so a PR check cannot cancel a live deploy.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -28,11 +33,13 @@ jobs:
       - run: npm test
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
         with:
           path: dist
 
   deploy:
     needs: check
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       pages: write
